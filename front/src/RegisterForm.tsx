@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react'
+import { type FormEvent, useState } from 'react'
 
 function RegisterForm() {
   const [username, setUsername] = useState('')
@@ -8,7 +8,7 @@ function RegisterForm() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     try {
-      const res = await fetch('/api/users/register', {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || ''}/api/users/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
