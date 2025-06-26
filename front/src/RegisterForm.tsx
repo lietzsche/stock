@@ -10,6 +10,10 @@ function RegisterForm() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
+    if (!username || !password || !confirmPassword || !email || !phone) {
+      setMessage('All fields are required')
+      return
+    }
     if (password !== confirmPassword) {
       setMessage('Passwords do not match')
       return
@@ -53,6 +57,7 @@ function RegisterForm() {
         onChange={(e) => setUsername(e.target.value)}
         placeholder="Username"
         className="border rounded p-2"
+        required
       />
       <input
         type="password"
@@ -60,6 +65,7 @@ function RegisterForm() {
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Password"
         className="border rounded p-2"
+        required
       />
       <input
         type="password"
@@ -67,6 +73,7 @@ function RegisterForm() {
         onChange={(e) => setConfirmPassword(e.target.value)}
         placeholder="Confirm Password"
         className="border rounded p-2"
+        required
       />
       <input
         type="email"
@@ -74,6 +81,7 @@ function RegisterForm() {
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Email"
         className="border rounded p-2"
+        required
       />
       <input
         type="tel"
@@ -81,6 +89,7 @@ function RegisterForm() {
         onChange={(e) => setPhone(e.target.value)}
         placeholder="Phone"
         className="border rounded p-2"
+        required
       />
       <button type="submit" className="bg-blue-500 text-white rounded p-2">
         Register
