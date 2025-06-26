@@ -7,18 +7,31 @@ function RegisterForm() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    const res = await fetch('/api/users/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password }),
-    })
+    try {
+      const res = await fetch('/api/users/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      })
 
-    if (res.ok) {
-      setMessage('Registered successfully')
-      setUsername('')
-      setPassword('')
-    } else {
-      setMessage('Registration failed')
+      if (res.ok) {
+        setMessage('Registered successfully')
+        setUsername('')
+        setPassword('')
+      } else {
+        let errorMsg = 'Registration failed'
+        try {
+          const data = await res.json()
+          if (data && typeof data.message === 'string') {
+            errorMsg = data.message
+          }
+        } catch {
+          // ignore JSON parsing errors
+        }
+        setMessage(errorMsg)
+      }
+    } catch {
+      setMessage('Network error: unable to connect')
     }
   }
 
