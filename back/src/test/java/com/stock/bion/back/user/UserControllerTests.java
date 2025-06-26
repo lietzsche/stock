@@ -48,4 +48,18 @@ class UserControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").isString());
     }
+
+    @Test
+    void duplicateUsernameReturnsError() throws Exception {
+        UserRegistrationRequest request = new UserRegistrationRequest("dupuser", "pass1");
+        mockMvc.perform(post("/api/users/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(post("/api/users/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isConflict());
+    }
 }

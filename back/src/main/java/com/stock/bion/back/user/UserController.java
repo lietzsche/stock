@@ -1,6 +1,7 @@
 package com.stock.bion.back.user;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +17,11 @@ public class UserController {
     private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody UserRegistrationRequest request) {
+    public ResponseEntity<?> register(@RequestBody UserRegistrationRequest request) {
+        if (userRepository.findByUsername(request.username()) != null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+
         User user = new User();
         user.setUsername(request.username());
         user.setPassword(passwordEncoder.encode(request.password()));
