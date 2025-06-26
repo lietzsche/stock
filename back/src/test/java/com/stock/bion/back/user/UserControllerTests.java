@@ -32,4 +32,20 @@ class UserControllerTests {
                 .andExpect(jsonPath("$.username").value("user1"))
                 .andExpect(jsonPath("$.password").doesNotExist());
     }
+
+    @Test
+    void loginReturnsToken() throws Exception {
+        UserRegistrationRequest request = new UserRegistrationRequest("loginuser", "pass1");
+        mockMvc.perform(post("/api/users/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk());
+
+        LoginRequest loginRequest = new LoginRequest("loginuser", "pass1");
+        mockMvc.perform(post("/api/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(loginRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.token").isString());
+    }
 }

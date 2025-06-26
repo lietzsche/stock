@@ -13,12 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserRepository userRepository;
+    private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody UserRegistrationRequest request) {
         User user = new User();
         user.setUsername(request.username());
-        user.setPassword(request.password());
+        user.setPassword(passwordEncoder.encode(request.password()));
         User saved = userRepository.save(user);
         saved.setPassword(null); // do not expose password
         return ResponseEntity.ok(saved);
