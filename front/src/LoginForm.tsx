@@ -1,6 +1,8 @@
 import { type FormEvent, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 function LoginForm() {
+  const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState('')
@@ -18,9 +20,9 @@ function LoginForm() {
         const data = await res.json()
         if (data && typeof data.token === 'string') {
           localStorage.setItem('token', data.token)
-          setMessage('Login successful')
           setUsername('')
           setPassword('')
+          navigate('/')
         } else {
           setMessage('Invalid response from server')
         }
@@ -35,24 +37,22 @@ function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-2 max-w-xs">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-3">
       <input
         type="text"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
         placeholder="Username"
-        className="border rounded p-2"
+        className="form-field"
       />
       <input
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Password"
-        className="border rounded p-2"
+        className="form-field"
       />
-      <button type="submit" className="bg-green-500 text-white rounded p-2">
-        Login
-      </button>
+      <button type="submit" className="button-primary">Login</button>
       {message && <p>{message}</p>}
     </form>
   )

@@ -1,6 +1,8 @@
 import { type FormEvent, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 function RegisterForm() {
+  const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -26,12 +28,12 @@ function RegisterForm() {
       })
 
       if (res.ok) {
-        setMessage('Registered successfully')
         setUsername('')
         setPassword('')
         setConfirmPassword('')
         setEmail('')
         setPhone('')
+        navigate('/login')
       } else {
         let errorMsg = 'Registration failed'
         try {
@@ -50,13 +52,13 @@ function RegisterForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-2 max-w-xs">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-3">
       <input
         type="text"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
         placeholder="Username"
-        className="border rounded p-2"
+        className="form-field"
         required
       />
       <input
@@ -64,7 +66,7 @@ function RegisterForm() {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Password"
-        className="border rounded p-2"
+        className="form-field"
         required
       />
       <input
@@ -72,7 +74,7 @@ function RegisterForm() {
         value={confirmPassword}
         onChange={(e) => setConfirmPassword(e.target.value)}
         placeholder="Confirm Password"
-        className="border rounded p-2"
+        className="form-field"
         required
       />
       <input
@@ -80,7 +82,7 @@ function RegisterForm() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Email"
-        className="border rounded p-2"
+        className="form-field"
         required
       />
       <input
@@ -88,12 +90,10 @@ function RegisterForm() {
         value={phone}
         onChange={(e) => setPhone(e.target.value)}
         placeholder="Phone"
-        className="border rounded p-2"
+        className="form-field"
         required
       />
-      <button type="submit" className="bg-blue-500 text-white rounded p-2">
-        Register
-      </button>
+      <button type="submit" className="button-primary">Register</button>
       {message && <p>{message}</p>}
     </form>
   )
