@@ -11,6 +11,9 @@ function HomePage() {
         <Link to="/register" className="link">
           Register
         </Link>
+        <Link to="/stock/005930" className="link">
+          Stock
+        </Link>
       </div>
     </div>
   )
