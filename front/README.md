@@ -1,5 +1,14 @@
 # React + TypeScript + Vite
 
+This app now includes a simple stock price page. After starting the dev server you can
+click **Stock** on the home page (or open `/stock/005930`) to fetch data from
+`/api/stocks/{code}`.
+
+```
+npm install
+npm run dev
+```
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
