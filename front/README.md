@@ -7,7 +7,10 @@ click **Stock** on the home page (or open `/stock/005930`) to fetch data from
 ```
 npm install
 npm run dev
+npm test
 ```
+
+Run `npm test` to execute Vitest unit tests for the forms.
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 

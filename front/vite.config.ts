@@ -12,5 +12,10 @@ export default defineConfig(({ mode }) => {
         '/api': apiBaseUrl,
       },
     },
+    test: {
+      globals: true,
+      environment: 'jsdom',
+      setupFiles: './src/setupTests.ts',
+    },
   }
 })
