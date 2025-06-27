@@ -107,6 +107,7 @@ alpaca:
 | POST | `/api/v1/trades/execute` | `{ "signalRunId":123 }`                  | 해당 시그널로 주문 실행                |
 | GET  | `/api/v1/review/daily`   | `userId`, `date`                         | 일일 P\&L, 승률, 차트 URL          |
 | GET  | `/api/v1/review/weekly`  | `userId`, `week`                         | 주간 통계 및 파라미터 변화              |
+| GET  | `/api/stocks/{code}`     | -                                        | 현재 주가 조회                        |
 
 모든 엔드포인트는 `Authorization: Bearer <JWT>` 필요 (Spring Security HS256).
 
