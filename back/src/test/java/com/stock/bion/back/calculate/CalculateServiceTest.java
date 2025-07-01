@@ -57,7 +57,7 @@ class CalculateServiceTest {
 
         // 2. 시그널 : AAA = true, BBB/CCC = false
         when(trailingStopStrategyService.isNonHerdTrendSignal(eq("AAA"),
-                any(TrailingStopStrategyService.TimeFrame.class))).thenReturn(true);
+                any(DataService.TimeFrame.class))).thenReturn(true);
         when(trailingStopStrategyService.isNonHerdTrendSignal(eq("BBB"),
                 any())).thenReturn(false);
         when(trailingStopStrategyService.isNonHerdTrendSignal(eq("CCC"),
@@ -65,7 +65,7 @@ class CalculateServiceTest {
 
         // 3. 호출
         List<Stock> result = calculateService.getByTrailingStopStrategy(
-                TrailingStopStrategyService.TimeFrame.SHORT_TERM);
+				DataService.TimeFrame.SHORT_TERM);
 
         // 4. 검증
         assertEquals(1, result.size(), "시그널이 true 인 종목만 반환해야 한다");
@@ -74,11 +74,11 @@ class CalculateServiceTest {
         // 5. 상호작용 검증 (선택)
         verify(dataService).getCompanyInfo();
         verify(trailingStopStrategyService, times(1))
-                .isNonHerdTrendSignal("AAA", TrailingStopStrategyService.TimeFrame.SHORT_TERM);
+                .isNonHerdTrendSignal("AAA", DataService.TimeFrame.SHORT_TERM);
         verify(trailingStopStrategyService, times(1))
-                .isNonHerdTrendSignal("BBB", TrailingStopStrategyService.TimeFrame.SHORT_TERM);
+                .isNonHerdTrendSignal("BBB", DataService.TimeFrame.SHORT_TERM);
         verify(trailingStopStrategyService, times(1))
-                .isNonHerdTrendSignal("CCC", TrailingStopStrategyService.TimeFrame.SHORT_TERM);
+                .isNonHerdTrendSignal("CCC", DataService.TimeFrame.SHORT_TERM);
         verifyNoMoreInteractions(dataService, trailingStopStrategyService);
     }
 }

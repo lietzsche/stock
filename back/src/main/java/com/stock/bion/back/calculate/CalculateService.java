@@ -16,7 +16,7 @@ public class CalculateService {
 		this.dataService = dataService;
 	}
 
-	public List<Stock> getByTrailingStopStrategy(TrailingStopStrategyService.TimeFrame timeframe) {
+	public List<Stock> getByTrailingStopStrategy(DataService.TimeFrame timeframe) {
 		return dataService.getCompanyInfo().stream()
 				.filter(stock -> trailingStopStrategyService.isNonHerdTrendSignal(stock.getCode(), timeframe)).toList();
 	}

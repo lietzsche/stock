@@ -57,7 +57,7 @@ class TrailingStopStrategyServiceTest {
 	@Test
 	void testIsNonHerdTrendSignal_true() {
 		stubPrices(samplePrices);
-		boolean result = service.isNonHerdTrendSignal("TEST", TrailingStopStrategyService.TimeFrame.SHORT_TERM);
+		boolean result = service.isNonHerdTrendSignal("TEST", DataService.TimeFrame.SHORT_TERM);
 		assertTrue(result);
 	}
 
@@ -66,7 +66,7 @@ class TrailingStopStrategyServiceTest {
 	void testIsNonHerdTrendSignal_falseOnHighVolume() {
 		samplePrices.get(0).setVolume(1300);
 		stubPrices(samplePrices);
-		assertFalse(service.isNonHerdTrendSignal("TEST", TrailingStopStrategyService.TimeFrame.SHORT_TERM));
+		assertFalse(service.isNonHerdTrendSignal("TEST", DataService.TimeFrame.SHORT_TERM));
 	}
 
 	/** 전고점 돌파가 없어서 false */
@@ -74,35 +74,14 @@ class TrailingStopStrategyServiceTest {
 	void testIsNonHerdTrendSignal_falseOnNoBreakout() {
 		samplePrices.get(0).setClose(100);
 		stubPrices(samplePrices);
-		assertFalse(service.isNonHerdTrendSignal("TEST", TrailingStopStrategyService.TimeFrame.SHORT_TERM));
-	}
-
-	@Test
-	void testComputeDailyReturns() {
-		List<Double> returns = service.computeDailyReturns(samplePrices);
-		assertEquals(4, returns.size(), "리턴 리스트 크기 확인");
-
-		// 기대 수익률을 변수로 계산
-		double expected0 = (samplePrices.get(0).getClose() - samplePrices.get(1).getClose())
-				/ samplePrices.get(1).getClose();
-		double expected1 = (samplePrices.get(1).getClose() - samplePrices.get(2).getClose())
-				/ samplePrices.get(2).getClose();
-		double expected2 = (samplePrices.get(2).getClose() - samplePrices.get(3).getClose())
-				/ samplePrices.get(3).getClose();
-		double expected3 = (samplePrices.get(3).getClose() - samplePrices.get(4).getClose())
-				/ samplePrices.get(4).getClose();
-
-		assertEquals(expected0, returns.get(0), 1e-6, "오늘/어제 수익률");
-		assertEquals(expected1, returns.get(1), 1e-6, "어제/2일전 수익률");
-		assertEquals(expected2, returns.get(2), 1e-6, "2일전/3일전 수익률");
-		assertEquals(expected3, returns.get(3), 1e-6, "3일전/4일전 수익률");
+		assertFalse(service.isNonHerdTrendSignal("TEST", DataService.TimeFrame.SHORT_TERM));
 	}
 
 	@Test
     void testIsNonHerdTrendSignal_viaServiceFetch() {
         when(dataService.getPriceInfo("TEST", 1)).thenReturn(samplePrices);
         boolean result = service.isNonHerdTrendSignal("TEST",
-                TrailingStopStrategyService.TimeFrame.SHORT_TERM);
+				DataService.TimeFrame.SHORT_TERM);
         assertTrue(result);
         verify(dataService, atLeastOnce()).getPriceInfo("TEST", 1);
     }

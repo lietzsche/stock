@@ -1,5 +1,6 @@
 package com.stock.bion.back.data;
 
+import com.stock.bion.back.calculate.TrailingStopStrategyService;
 import com.stock.bion.back.exception.DocumentFetchException;
 import com.stock.bion.back.util.FormatUtil;
 import java.io.IOException;
@@ -16,6 +17,47 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class DataService {
+
+	/**
+	 * 조회 기간(TimeFrame)을 나타내는 열거형입니다. SHORT_TERM: 단기(약 1개월) LONG_TERM : 장기(약 1년)
+	 */
+	public enum TimeFrame {
+		SHORT_TERM, // 약 1개월
+		MEDIUM_TERM,
+		LONG_TERM; // 약 1년
+
+		/**
+		 * 각 기간별 대략적인 거래일 수를 반환합니다.
+		 */
+		public int getLookbackDays() {
+			return switch (this) {
+				case SHORT_TERM -> 22; // 약 1개월
+				case MEDIUM_TERM -> 120; // 약 1년
+				case LONG_TERM -> 250; // 약 1년
+				default -> throw new IllegalArgumentException("지원하지 않는 기간: " + this);
+			};
+		}
+	}
+
+	/**
+	 * 조회 기간(TimeFrame)에 따라 과거 가격 데이터를 페이지별로 조회해 반환합니다.
+	 */
+	public List<Price> fetchPricesForTimeframe(String code, TimeFrame timeframe) {
+		int days = timeframe.getLookbackDays();
+		List<Price> allPrices = new ArrayList<>();
+		int page = 1;
+		while (allPrices.size() < days) {
+			List<Price> pagePrices = getPriceInfo(code, page++);
+			if (pagePrices.isEmpty()) {
+				break;
+			}
+			allPrices.addAll(pagePrices);
+		}
+		// API가 최신 데이터를 먼저 반환한다고 가정하고 최근 'days'개만 반환
+		return allPrices.stream().limit(days).toList();
+	}
+
+	/// 아래 통신 로직
 
 	private static final String COMPANIES_URL = "http://kind.krx.co.kr/corpgeneral/corpList.do?method=download&searchType=13";
 	private static final String PRICES_URL = "http://finance.naver.com/item/sise_day.nhn?code=%s&page=%d";
