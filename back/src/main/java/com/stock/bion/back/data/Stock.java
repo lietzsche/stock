@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class Stock {
-    private String code;
-    private String name;
+	private String code;
+	private String name;
 }
