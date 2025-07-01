@@ -1,0 +1,29 @@
+###
+POST http://localhost:8080/api/users/register
+Content-Type: application/json
+
+{
+  "username": "",
+  "password": "",
+  "confirmPassword": "",
+  "email": "",
+  "phone": ""
+}
+
+###
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "",
+  "password": ""
+}
+
+###
+GET http://localhost:8080/strategy/trailing-stop/short
+
+###
+GET http://localhost:8080/strategy/trailing-stop/middle
+
+###
+GET http://localhost:8080/strategy/trailing-stop/long
