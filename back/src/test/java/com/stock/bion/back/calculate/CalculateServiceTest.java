@@ -18,42 +18,39 @@ import static org.mockito.Mockito.*;
 /**
  * CalculateService#getByTrailingStopStrategy(TimeFrame) 단위 테스트
  *
- * – DataService.getCompanyInfo()  ➜ 상장 종목 리스트 제공 (mock)
- * – TrailingStopStrategyService.isNonHerdTrendSignal() ➜ 종목별 필터 여부 (mock)
+ * – DataService.getCompanyInfo() ➜ 상장 종목 리스트 제공 (mock) –
+ * TrailingStopStrategyService.isNonHerdTrendSignal() ➜ 종목별 필터 여부 (mock)
  *
  * 기대 : true 를 리턴한 종목만 결과에 포함
  */
 @ExtendWith(MockitoExtension.class)
 class CalculateServiceTest {
 
-    @Mock
-    private DataService dataService;
+	@Mock
+	private DataService dataService;
 
-    @Mock
-    private TrailingStopStrategyService trailingStopStrategyService;
+	@Mock
+	private TrailingStopStrategyService trailingStopStrategyService;
 
-    @InjectMocks
-    private CalculateService calculateService;
+	@InjectMocks
+	private CalculateService calculateService;
 
-    private List<Stock> companyList;
+	private List<Stock> companyList;
 
-    @BeforeEach
-    void setUp() {
-        companyList = List.of(
-                makeStock("AAA", "AAA Corp."),
-                makeStock("BBB", "BBB Inc."),
-                makeStock("CCC", "CCC Ltd.")
-        );
-    }
+	@BeforeEach
+	void setUp() {
+		companyList = List.of(makeStock("AAA", "AAA Corp."), makeStock("BBB", "BBB Inc."),
+				makeStock("CCC", "CCC Ltd."));
+	}
 
-    private Stock makeStock(String code, String name) {
-        Stock s = new Stock();
-        s.setCode(code);
-        s.setName(name);
-        return s;
-    }
+	private Stock makeStock(String code, String name) {
+		Stock s = new Stock();
+		s.setCode(code);
+		s.setName(name);
+		return s;
+	}
 
-    @Test
+	@Test
     void getByTrailingStopStrategy_filters_by_signal() {
         // 1. 상장 종목 목록 stub
         when(dataService.getCompanyInfo()).thenReturn(companyList);

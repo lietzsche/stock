@@ -57,8 +57,7 @@ class TrailingStopStrategyServiceTest {
 	@Test
 	void testIsNonHerdTrendSignal_true() {
 		stubPrices(samplePrices);
-		boolean result = service.isNonHerdTrendSignal("TEST",
-				TrailingStopStrategyService.TimeFrame.SHORT_TERM);
+		boolean result = service.isNonHerdTrendSignal("TEST", TrailingStopStrategyService.TimeFrame.SHORT_TERM);
 		assertTrue(result);
 	}
 
@@ -67,8 +66,7 @@ class TrailingStopStrategyServiceTest {
 	void testIsNonHerdTrendSignal_falseOnHighVolume() {
 		samplePrices.get(0).setVolume(1300);
 		stubPrices(samplePrices);
-		assertFalse(service.isNonHerdTrendSignal("TEST",
-				TrailingStopStrategyService.TimeFrame.SHORT_TERM));
+		assertFalse(service.isNonHerdTrendSignal("TEST", TrailingStopStrategyService.TimeFrame.SHORT_TERM));
 	}
 
 	/** 전고점 돌파가 없어서 false */
@@ -76,8 +74,7 @@ class TrailingStopStrategyServiceTest {
 	void testIsNonHerdTrendSignal_falseOnNoBreakout() {
 		samplePrices.get(0).setClose(100);
 		stubPrices(samplePrices);
-		assertFalse(service.isNonHerdTrendSignal("TEST",
-				TrailingStopStrategyService.TimeFrame.SHORT_TERM));
+		assertFalse(service.isNonHerdTrendSignal("TEST", TrailingStopStrategyService.TimeFrame.SHORT_TERM));
 	}
 
 	@Test

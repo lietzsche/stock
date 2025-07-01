@@ -20,19 +20,18 @@ public class TrailingStopStrategyService {
 	 */
 	public enum TimeFrame {
 		SHORT_TERM, // 약 1개월
-		MEDIUM_TERM,
-		LONG_TERM; // 약 1년
+		MEDIUM_TERM, LONG_TERM; // 약 1년
 
 		/**
 		 * 각 기간별 대략적인 거래일 수를 반환합니다.
 		 */
 		public int getLookbackDays() {
-            return switch (this) {
-                case SHORT_TERM -> 22; // 약 1개월
-                case MEDIUM_TERM -> 120; // 약 1년
-                case LONG_TERM -> 250; // 약 1년
-                default -> throw new IllegalArgumentException("지원하지 않는 기간: " + this);
-            };
+			return switch (this) {
+				case SHORT_TERM -> 22; // 약 1개월
+				case MEDIUM_TERM -> 120; // 약 1년
+				case LONG_TERM -> 250; // 약 1년
+				default -> throw new IllegalArgumentException("지원하지 않는 기간: " + this);
+			};
 		}
 	}
 
@@ -63,10 +62,8 @@ public class TrailingStopStrategyService {
 	}
 
 	/**
-	 * 핵심 시그널 로직:
-	 * 1) 오늘 거래량이 전체 기간 중 최고치가 아니어야 합니다. (거래량의 최고점을 피함)
-	 * 2) 오늘 종가가 이전 최고 종가를 돌파해야 합니다.
-	 * 3) 최근 3일 동안 저가와 고가가 모두 연속 상승해야 합니다.
+	 * 핵심 시그널 로직: 1) 오늘 거래량이 전체 기간 중 최고치가 아니어야 합니다. (거래량의 최고점을 피함) 2) 오늘 종가가 이전 최고
+	 * 종가를 돌파해야 합니다. 3) 최근 3일 동안 저가와 고가가 모두 연속 상승해야 합니다.
 	 */
 	private boolean isNonHerdTrendSignal(List<Price> prices) {
 		if (prices.size() < 4) {
@@ -97,20 +94,22 @@ public class TrailingStopStrategyService {
 		}
 
 		// ④ 모멘텀(미분) 필터 추가
-		double alpha = 0.01;          // 최소 일간 수익률 +1 %
-		double beta  = 0.0;           // 가속도 0 이상
-        return isMomentumIncreasing(prices, alpha, beta);
-    }
+		double alpha = 0.01; // 최소 일간 수익률 +1 %
+		double beta = 0.0; // 가속도 0 이상
+		return isMomentumIncreasing(prices, alpha, beta);
+	}
 
 	private boolean isMomentumIncreasing(List<Price> prices, double alpha, double beta) {
-		List<Double> d1 = computeDailyReturns(prices);   // 1차
+		List<Double> d1 = computeDailyReturns(prices); // 1차
 		List<Double> d2 = new ArrayList<>();
 		for (int i = 1; i < d1.size(); i++)
-			d2.add( d1.get(i) - d1.get(i-1) );           // ★ 방향 교정
+			d2.add(d1.get(i) - d1.get(i - 1)); // ★ 방향 교정
 
 		for (int i = 0; i < 3; i++) {
-			if (d1.get(i) < alpha) return false;
-			if (d2.get(i) < beta ) return false;
+			if (d1.get(i) < alpha)
+				return false;
+			if (d2.get(i) < beta)
+				return false;
 		}
 		return true;
 	}
