@@ -23,8 +23,7 @@ public class DataService {
 	 */
 	public enum TimeFrame {
 		SHORT_TERM, // 약 1개월
-		MEDIUM_TERM,
-		LONG_TERM; // 약 1년
+		MEDIUM_TERM, LONG_TERM; // 약 1년
 
 		/**
 		 * 각 기간별 대략적인 거래일 수를 반환합니다.
