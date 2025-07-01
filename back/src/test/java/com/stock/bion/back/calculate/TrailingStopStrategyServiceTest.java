@@ -47,22 +47,37 @@ class TrailingStopStrategyServiceTest {
 		return p;
 	}
 
+	private void stubPrices(List<Price> prices) {
+		when(dataService.getPriceInfo(eq("TEST"), anyInt()))
+				.thenReturn(prices)      // page = 1
+				.thenReturn(List.of());  // page ≥ 2 → 루프 종료
+	}
+
+	/** 시그널이 true 여야 하는 경우 */
 	@Test
 	void testIsNonHerdTrendSignal_true() {
-		boolean result = service.isNonHerdTrendSignal(samplePrices);
-		assertTrue(result, "소신파 상승 추세 시그널이 발생해야 합니다.");
+		stubPrices(samplePrices);
+		boolean result = service.isNonHerdTrendSignal("TEST",
+				TrailingStopStrategyService.TimeFrame.SHORT_TERM);
+		assertTrue(result);
 	}
 
+	/** 오늘 거래량이 최고치라 false */
 	@Test
 	void testIsNonHerdTrendSignal_falseOnHighVolume() {
-		samplePrices.get(0).setVolume(1300); // 오늘 거래량을 최고치로 설정
-		assertFalse(service.isNonHerdTrendSignal(samplePrices), "오늘 거래량이 최고치여서 시그널이 발생하면 안 됩니다.");
+		samplePrices.get(0).setVolume(1300);
+		stubPrices(samplePrices);
+		assertFalse(service.isNonHerdTrendSignal("TEST",
+				TrailingStopStrategyService.TimeFrame.SHORT_TERM));
 	}
 
+	/** 전고점 돌파가 없어서 false */
 	@Test
 	void testIsNonHerdTrendSignal_falseOnNoBreakout() {
-		samplePrices.get(0).setClose(100); // 전고점 돌파 없음
-		assertFalse(service.isNonHerdTrendSignal(samplePrices), "전고점 돌파가 없으면 시그널이 발생하면 안 됩니다.");
+		samplePrices.get(0).setClose(100);
+		stubPrices(samplePrices);
+		assertFalse(service.isNonHerdTrendSignal("TEST",
+				TrailingStopStrategyService.TimeFrame.SHORT_TERM));
 	}
 
 	@Test

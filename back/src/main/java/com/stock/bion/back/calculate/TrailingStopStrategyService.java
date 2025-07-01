@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class TrailingStopStrategyService {
@@ -21,20 +20,19 @@ public class TrailingStopStrategyService {
 	 */
 	public enum TimeFrame {
 		SHORT_TERM, // 약 1개월
+		MEDIUM_TERM,
 		LONG_TERM; // 약 1년
 
 		/**
 		 * 각 기간별 대략적인 거래일 수를 반환합니다.
 		 */
 		public int getLookbackDays() {
-			switch (this) {
-				case SHORT_TERM :
-					return 22; // 약 1개월
-				case LONG_TERM :
-					return 250; // 약 1년
-				default :
-					throw new IllegalArgumentException("지원하지 않는 기간: " + this);
-			}
+            return switch (this) {
+                case SHORT_TERM -> 22; // 약 1개월
+                case MEDIUM_TERM -> 120; // 약 1년
+                case LONG_TERM -> 250; // 약 1년
+                default -> throw new IllegalArgumentException("지원하지 않는 기간: " + this);
+            };
 		}
 	}
 
@@ -61,14 +59,16 @@ public class TrailingStopStrategyService {
 			allPrices.addAll(pagePrices);
 		}
 		// API가 최신 데이터를 먼저 반환한다고 가정하고 최근 'days'개만 반환
-		return allPrices.stream().limit(days).collect(Collectors.toList());
+		return allPrices.stream().limit(days).toList();
 	}
 
 	/**
-	 * 핵심 시그널 로직: 1) 오늘 거래량이 전체 기간 중 최고치가 아니어야 합니다. (거래량의 최고점을 피함) 2) 오늘 종가가 이전 최고
-	 * 종가를 돌파해야 합니다. 3) 최근 3일 동안 저가와 고가가 모두 연속 상승해야 합니다.
+	 * 핵심 시그널 로직:
+	 * 1) 오늘 거래량이 전체 기간 중 최고치가 아니어야 합니다. (거래량의 최고점을 피함)
+	 * 2) 오늘 종가가 이전 최고 종가를 돌파해야 합니다.
+	 * 3) 최근 3일 동안 저가와 고가가 모두 연속 상승해야 합니다.
 	 */
-	public boolean isNonHerdTrendSignal(List<Price> prices) {
+	private boolean isNonHerdTrendSignal(List<Price> prices) {
 		if (prices.size() < 4) {
 			return false;
 		}
@@ -96,6 +96,19 @@ public class TrailingStopStrategyService {
 			}
 		}
 
+		return true;
+	}
+
+	private boolean isMomentumIncreasing(List<Price> prices, double alpha, double beta) {
+		List<Double> d1 = computeDailyReturns(prices);               // 1차
+		List<Double> d2 = new ArrayList<>();
+		for (int i = 1; i < d1.size(); i++) d2.add(d1.get(i-1) - d1.get(i));
+
+		// 당일 포함 최근 3일 검사
+		for (int i = 0; i < 3; i++) {
+			if (d1.get(i) < alpha) return false;
+			if (d2.get(i) < beta ) return false;
+		}
 		return true;
 	}
 
