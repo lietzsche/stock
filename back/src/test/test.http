@@ -20,13 +20,16 @@ Content-Type: application/json
 }
 
 ###
+# @timeout 6000s
 GET http://localhost:8080/strategy/trailing-stop/short
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiaWF0IjoxNzUxMzQ0NDgwLCJleHAiOjE3NTEzNDgwODB9.RzDFx5f9AfdnCGSFnQm4blxM5psukeiqgc9hte-bzTM
 
 ###
+# @timeout 6000s
 GET http://localhost:8080/strategy/trailing-stop/middle
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiaWF0IjoxNzUxMzQ0NDgwLCJleHAiOjE3NTEzNDgwODB9.RzDFx5f9AfdnCGSFnQm4blxM5psukeiqgc9hte-bzTM
 
 ###
+# @timeout 6000s
 GET http://localhost:8080/strategy/trailing-stop/long
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiaWF0IjoxNzUxMzQ0NDgwLCJleHAiOjE3NTEzNDgwODB9.RzDFx5f9AfdnCGSFnQm4blxM5psukeiqgc9hte-bzTM
