@@ -96,15 +96,18 @@ public class TrailingStopStrategyService {
 			}
 		}
 
-		return true;
-	}
+		// ④ 모멘텀(미분) 필터 추가
+		double alpha = 0.01;          // 최소 일간 수익률 +1 %
+		double beta  = 0.0;           // 가속도 0 이상
+        return isMomentumIncreasing(prices, alpha, beta);
+    }
 
 	private boolean isMomentumIncreasing(List<Price> prices, double alpha, double beta) {
-		List<Double> d1 = computeDailyReturns(prices);               // 1차
+		List<Double> d1 = computeDailyReturns(prices);   // 1차
 		List<Double> d2 = new ArrayList<>();
-		for (int i = 1; i < d1.size(); i++) d2.add(d1.get(i-1) - d1.get(i));
+		for (int i = 1; i < d1.size(); i++)
+			d2.add( d1.get(i) - d1.get(i-1) );           // ★ 방향 교정
 
-		// 당일 포함 최근 3일 검사
 		for (int i = 0; i < 3; i++) {
 			if (d1.get(i) < alpha) return false;
 			if (d2.get(i) < beta ) return false;
