@@ -3,9 +3,9 @@ POST http://localhost:8080/api/users/register
 Content-Type: application/json
 
 {
-  "username": "",
-  "password": "",
-  "confirmPassword": "",
+  "username": "test",
+  "password": "test",
+  "confirmPassword": "test",
   "email": "",
   "phone": ""
 }
@@ -15,15 +15,18 @@ POST http://localhost:8080/api/auth/login
 Content-Type: application/json
 
 {
-  "username": "",
-  "password": ""
+  "username": "test",
+  "password": "test"
 }
 
 ###
 GET http://localhost:8080/strategy/trailing-stop/short
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiaWF0IjoxNzUxMzQ0NDgwLCJleHAiOjE3NTEzNDgwODB9.RzDFx5f9AfdnCGSFnQm4blxM5psukeiqgc9hte-bzTM
 
 ###
 GET http://localhost:8080/strategy/trailing-stop/middle
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiaWF0IjoxNzUxMzQ0NDgwLCJleHAiOjE3NTEzNDgwODB9.RzDFx5f9AfdnCGSFnQm4blxM5psukeiqgc9hte-bzTM
 
 ###
 GET http://localhost:8080/strategy/trailing-stop/long
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiaWF0IjoxNzUxMzQ0NDgwLCJleHAiOjE3NTEzNDgwODB9.RzDFx5f9AfdnCGSFnQm4blxM5psukeiqgc9hte-bzTM
