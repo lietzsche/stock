@@ -32,7 +32,7 @@ public class MomentumIncreasingService {
 		return isMomentumIncreasing(prices, alpha, beta);
 	}
 
-	private boolean isMomentumIncreasing(List<Price> prices, double alpha, double beta) {
+        public boolean isMomentumIncreasing(List<Price> prices, double alpha, double beta) {
 		List<Double> d1 = computeDailyReturns(prices); // 1차
 		List<Double> d2 = new ArrayList<>();
 		for (int i = 1; i < d1.size(); i++)
