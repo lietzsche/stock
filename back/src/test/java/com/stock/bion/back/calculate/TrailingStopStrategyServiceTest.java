@@ -47,11 +47,10 @@ class TrailingStopStrategyServiceTest {
 		return p;
 	}
 
-	private void stubPrices(List<Price> prices) {
-		when(dataService.getPriceInfo(eq("TEST"), anyInt()))
-				.thenReturn(prices)      // page = 1
-				.thenReturn(List.of());  // page ≥ 2 → 루프 종료
-	}
+        private void stubPrices(List<Price> prices) {
+                when(dataService.fetchPricesForTimeframe(eq("TEST"), any()))
+                                .thenReturn(prices);
+        }
 
 	/** 시그널이 true 여야 하는 경우 */
 	@Test
@@ -77,12 +76,15 @@ class TrailingStopStrategyServiceTest {
 		assertFalse(service.isNonHerdTrendSignal("TEST", DataService.TimeFrame.SHORT_TERM));
 	}
 
-	@Test
-    void testIsNonHerdTrendSignal_viaServiceFetch() {
-        when(dataService.getPriceInfo("TEST", 1)).thenReturn(samplePrices);
-        boolean result = service.isNonHerdTrendSignal("TEST",
-				DataService.TimeFrame.SHORT_TERM);
-        assertTrue(result);
-        verify(dataService, atLeastOnce()).getPriceInfo("TEST", 1);
-    }
+        @Test
+        void testIsNonHerdTrendSignal_viaServiceFetch() {
+                when(dataService.fetchPricesForTimeframe("TEST", DataService.TimeFrame.SHORT_TERM))
+                                .thenReturn(samplePrices);
+
+                boolean result = service.isNonHerdTrendSignal("TEST", DataService.TimeFrame.SHORT_TERM);
+
+                assertTrue(result);
+                verify(dataService, atLeastOnce())
+                                .fetchPricesForTimeframe("TEST", DataService.TimeFrame.SHORT_TERM);
+        }
 }
