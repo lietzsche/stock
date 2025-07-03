@@ -1,7 +1,7 @@
 package com.stock.bion.back.calculate;
 
-import com.stock.bion.back.data.PriceEntity;
-import com.stock.bion.back.data.PriceRepository;
+import com.stock.bion.back.calculate.StrategyResultEntity;
+import com.stock.bion.back.calculate.StrategyResultRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,35 +21,23 @@ class StrategyApiControllerTest {
     @Autowired
     MockMvc mockMvc;
     @Autowired
-    PriceRepository priceRepository;
+    StrategyResultRepository resultRepository;
 
     @BeforeEach
     void setup() {
-        priceRepository.deleteAll();
+        resultRepository.deleteAll();
         insertSample("AAA", "AAA Corp");
     }
 
     private void insertSample(String code, String name) {
-        LocalDate today = LocalDate.now();
-        priceRepository.save(make(code, name, today, 110, 1000));
-        priceRepository.save(make(code, name, today.minusDays(1), 105, 800));
-        priceRepository.save(make(code, name, today.minusDays(2), 100, 900));
-        priceRepository.save(make(code, name, today.minusDays(3), 95, 1100));
-        priceRepository.save(make(code, name, today.minusDays(4), 90, 1200));
-    }
-
-    private PriceEntity make(String code, String name, LocalDate date, double close, double volume) {
-        PriceEntity e = new PriceEntity();
+        StrategyResultEntity e = new StrategyResultEntity();
         e.setCode(code);
         e.setName(name);
-        e.setDate(date);
-        e.setClose(close);
-        e.setHigh(close);
-        e.setLow(close - 10);
-        e.setOpen(close - 5);
-        e.setVolume(volume);
-        e.setDiff(0);
-        return e;
+        e.setStrategyType("TRAILING_STOP");
+        e.setTimeFrame("SHORT_TERM");
+        e.setEvaluatedAt(LocalDate.now());
+        e.setSignalValue(1.0);
+        resultRepository.save(e);
     }
 
     @Test
