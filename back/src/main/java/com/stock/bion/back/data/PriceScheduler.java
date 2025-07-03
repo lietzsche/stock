@@ -6,18 +6,18 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PriceScheduler {
-    private final PricePersistenceService pricePersistenceService;
-    private final StrategyResultService strategyResultService;
+	private final PricePersistenceService pricePersistenceService;
+	private final StrategyResultService strategyResultService;
 
-    public PriceScheduler(PricePersistenceService pricePersistenceService,
-                         StrategyResultService strategyResultService) {
-        this.pricePersistenceService = pricePersistenceService;
-        this.strategyResultService = strategyResultService;
-    }
+	public PriceScheduler(PricePersistenceService pricePersistenceService,
+			StrategyResultService strategyResultService) {
+		this.pricePersistenceService = pricePersistenceService;
+		this.strategyResultService = strategyResultService;
+	}
 
-    @Scheduled(cron = "0 0 1 * * *")
-    public void collectDailyPrices() {
-        pricePersistenceService.fetchAndSavePricesForAllCompanies();
-        strategyResultService.evaluateDaily();
-    }
+	@Scheduled(cron = "0 0 1 * * *")
+	public void collectDailyPrices() {
+		pricePersistenceService.fetchAndSavePricesForAllCompanies();
+		strategyResultService.evaluateDaily();
+	}
 }

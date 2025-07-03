@@ -27,7 +27,7 @@ public class TrailingStopStrategyService {
 	 * 핵심 시그널 로직: 1) 오늘 거래량이 전체 기간 중 최고치가 아니어야 합니다. (거래량의 최고점을 피함) 2) 오늘 종가가 이전 최고
 	 * 종가를 돌파해야 합니다. 3) 최근 3일 동안 저가와 고가가 모두 연속 상승해야 합니다.
 	 */
-        public boolean isNonHerdTrendSignal(List<Price> prices) {
+	public boolean isNonHerdTrendSignal(List<Price> prices) {
 		if (prices.size() < 4) {
 			return false;
 		}

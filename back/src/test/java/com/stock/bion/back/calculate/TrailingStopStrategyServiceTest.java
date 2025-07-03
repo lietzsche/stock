@@ -47,7 +47,7 @@ class TrailingStopStrategyServiceTest {
 		return p;
 	}
 
-        private void stubPrices(List<Price> prices) {
+	private void stubPrices(List<Price> prices) {
                 when(dataService.fetchPricesForTimeframe(eq("TEST"), any()))
                                 .thenReturn(prices);
         }
@@ -76,7 +76,7 @@ class TrailingStopStrategyServiceTest {
 		assertFalse(service.isNonHerdTrendSignal("TEST", DataService.TimeFrame.SHORT_TERM));
 	}
 
-        @Test
+	@Test
         void testIsNonHerdTrendSignal_viaServiceFetch() {
                 when(dataService.fetchPricesForTimeframe("TEST", DataService.TimeFrame.SHORT_TERM))
                                 .thenReturn(samplePrices);

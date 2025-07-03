@@ -39,13 +39,13 @@ public class CalculateController {
 		return ResponseEntity.ok(momentumIncreasingService.getByMomentumIncreasing(DataService.TimeFrame.LONG_TERM));
 	}
 
-        @GetMapping("strategy/momentum/middle")
-        public ResponseEntity<List<Stock>> momentumStrategyMiddleTerm() {
-                return ResponseEntity.ok(momentumIncreasingService.getByMomentumIncreasing(DataService.TimeFrame.MEDIUM_TERM));
-        }
+	@GetMapping("strategy/momentum/middle")
+	public ResponseEntity<List<Stock>> momentumStrategyMiddleTerm() {
+		return ResponseEntity.ok(momentumIncreasingService.getByMomentumIncreasing(DataService.TimeFrame.MEDIUM_TERM));
+	}
 
-        @GetMapping("strategy/momentum/short")
-        public ResponseEntity<List<Stock>> momentumStrategyShortTerm() {
-                return ResponseEntity.ok(momentumIncreasingService.getByMomentumIncreasing(DataService.TimeFrame.SHORT_TERM));
-        }
+	@GetMapping("strategy/momentum/short")
+	public ResponseEntity<List<Stock>> momentumStrategyShortTerm() {
+		return ResponseEntity.ok(momentumIncreasingService.getByMomentumIncreasing(DataService.TimeFrame.SHORT_TERM));
+	}
 }
