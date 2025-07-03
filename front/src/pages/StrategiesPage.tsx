@@ -1,18 +1,19 @@
 import { useEffect, useState } from 'react'
+import api from '../api'
 
 function StrategiesPage() {
   const [trailing, setTrailing] = useState<any[]>([])
   const [momentum, setMomentum] = useState<any[]>([])
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_BASE_URL || ''}/api/strategies/trailing-stop/short`)
-      .then((res) => res.json())
-      .then(setTrailing)
+    api
+      .get('/api/strategies/trailing-stop/short')
+      .then((res) => setTrailing(res.data))
       .catch(() => {})
 
-    fetch(`${import.meta.env.VITE_API_BASE_URL || ''}/api/strategies/momentum/short`)
-      .then((res) => res.json())
-      .then(setMomentum)
+    api
+      .get('/api/strategies/momentum/short')
+      .then((res) => setMomentum(res.data))
       .catch(() => {})
   }, [])
 

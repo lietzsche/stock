@@ -1,5 +1,6 @@
 import { type FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import api from './api'
 
 function RegisterForm() {
   const navigate = useNavigate()
@@ -21,33 +22,25 @@ function RegisterForm() {
       return
     }
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || ''}/api/users/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password, confirmPassword, email, phone }),
+      await api.post('/api/users/register', {
+        username,
+        password,
+        confirmPassword,
+        email,
+        phone
       })
-
-      if (res.ok) {
-        setUsername('')
-        setPassword('')
-        setConfirmPassword('')
-        setEmail('')
-        setPhone('')
-        navigate('/login')
-      } else {
-        let errorMsg = 'Registration failed'
-        try {
-          const data = await res.json()
-          if (data && typeof data.message === 'string') {
-            errorMsg = data.message
-          }
-        } catch {
-          // ignore JSON parsing errors
-        }
-        setMessage(errorMsg)
+      setUsername('')
+      setPassword('')
+      setConfirmPassword('')
+      setEmail('')
+      setPhone('')
+      navigate('/login')
+    } catch (err: any) {
+      let errorMsg = 'Registration failed'
+      if (err.response?.data && typeof err.response.data.message === 'string') {
+        errorMsg = err.response.data.message
       }
-    } catch {
-      setMessage('Network error: unable to connect')
+      setMessage(errorMsg)
     }
   }
 

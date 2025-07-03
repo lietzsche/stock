@@ -1,5 +1,6 @@
 import { type FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import api from './api'
 
 function LoginForm() {
   const navigate = useNavigate()
@@ -10,29 +11,23 @@ function LoginForm() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || ''}/api/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
-      })
+      const res = await api.post('/api/auth/login', { username, password })
 
-      if (res.ok) {
-        const data = await res.json()
-        if (data && typeof data.token === 'string') {
-          localStorage.setItem('token', data.token)
-          setUsername('')
-          setPassword('')
-          navigate('/')
-        } else {
-          setMessage('Invalid response from server')
-        }
-      } else if (res.status === 401) {
+      const data = res.data as any
+      if (data && typeof data.token === 'string') {
+        localStorage.setItem('token', data.token)
+        setUsername('')
+        setPassword('')
+        navigate('/')
+      } else {
+        setMessage('Invalid response from server')
+      }
+    } catch (err: any) {
+      if (err.response?.status === 401) {
         setMessage('Invalid credentials')
       } else {
         setMessage('Login failed')
       }
-    } catch {
-      setMessage('Network error: unable to connect')
     }
   }
 
