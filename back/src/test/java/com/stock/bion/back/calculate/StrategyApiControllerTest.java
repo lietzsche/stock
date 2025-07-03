@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.LocalDate;
 
@@ -41,6 +42,7 @@ class StrategyApiControllerTest {
     }
 
     @Test
+    @WithMockUser
     void trailingStopShort_returnsData() throws Exception {
         mockMvc.perform(get("/api/strategies/trailing-stop/short").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
